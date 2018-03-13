@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_item_bg_selector_all">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="拍照说明"
+            android:textColor="@color/font_black1"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:lineSpacingExtra="4dp"
+            android:text="1、照片中号码要怕清晰;\n2、务必包含购买的所有组号码;\n3、不要包含其他无用信息;\n4、推荐按如下方式裁剪;"
+            android:textColor="@color/font_black2"
+            android:textSize="12sp"/>
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/tips"
+            android:layout_width="241dp"
+            android:layout_height="430dp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_marginRight="6dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:src="@mipmap/close"/>
+
+</RelativeLayout>

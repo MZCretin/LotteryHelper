@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="20dp"
+            android:text="分析结果：分析结果仅供分析，最终结果请核对彩票官网，谢谢您的使用，希望您中大奖！"
+            android:textColor="@color/font_black1"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:id="@+id/tv_tips_qihao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:textColor="@color/font_orange"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_haoma"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/font_orange"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_step1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="20dp"
+        android:text="第一步：点击按钮将您的彩票拍成照片后进行分析，拍完后请对范围进行截取，只需要包含您购买的号码信息和开奖期，请尽量不要包含其他无用信息，演示示例："
+        android:textColor="@color/font_black1"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_button_round100"
+        android:paddingBottom="10dp"
+        android:paddingLeft="36dp"
+        android:paddingRight="36dp"
+        android:paddingTop="10dp"
+        android:text="拍照自动获取号码"
+        android:textColor="#ffffff"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_step2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="20dp"
+        android:text="第二步：检查系统识别后的结果与您购买的号码是否匹配，如发现有误，您可以手动更改(点击号码更改)或者重新拍照识别。"
+        android:textColor="@color/font_black1"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_bianhao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="编号"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO1"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO2"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO3"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO4"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO5"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="NO6"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="蓝号"
+            android:textColor="@color/font_black1"/>
+
+        <TextView
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_border_gray"
+            android:gravity="center"
+            android:text="数量"
+            android:textColor="@color/font_black1"/>
+
+    </LinearLayout>
+</LinearLayout>

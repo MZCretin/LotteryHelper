@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="split_line">#11112233</color>
+    <color name="text1">#59B29C</color>
+    <color name="text2">#333333</color>
+
+    <color name="one">#fdb128</color>
+    <color name="two">#4a90e2</color>
+    <color name="three">#89c732</color>
+    <color name="four">#f46950</color>
+
+    <color name="title">#242424</color>
+    <color name="primary">#F44336</color>
+    <color name="primary_dark">#D32F2F</color>
+    <color name="primary_light">#FFCDD2</color>
+    <color name="accent">#03A9F4</color>
+    <color name="primary_text">#2a2a2a</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#F8F8F8</color>
+    <color name="divider">#B6B6B6</color>
+
+    <color name="activity_bg">#F8F8F8</color>
+    <color name="activity_bg1">#f1f1f1</color>
+
+    <color name="app_bg_color2">#F4F4F4</color>
+    <color name="app_bg_color">#EFEFF4</color>
+    <color name="app_bg_color1">#FAFAFA</color>
+    <color name="app_bg_color3">#F8F8F8</color>
+    <color name="app_bg_color4">#F2F2F2</color>
+    <color name="app_btn_color">#dedede</color>
+    <color name="app_title_color">#f9f9f9</color>
+    <color name="lined8d8d8">#d8d8d8</color>
+    <color name="common_color">#03A9F4</color>
+
+    <color name="light_red">#FD8F8D</color>
+    <color name="red_money_out">#fb1935</color>
+    <color name="red_ef0000">#ef0000</color>
+    <color name="green_money_in">#7ed321</color>
+    <color name="green_status">#40C850</color>
+    <color name="green_money_out">#7ec059</color>
+    <color name="gesture_green_color">#6BAE36</color>
+    <color name="msg_content">#404040</color>
+
+    <color name="font_orange">#f5a623</color>
+    <color name="font_black1">#4a4a4a</color>
+    <color name="font_black2">#8e8e93</color>
+    <color name="font_black3">#000000</color>
+    <color name="font_black4">#9b9b9b</color>
+    <color name="bank_card_bg">#DADADD</color>
+    <color name="white">#ffffff</color>
+    <color name="color_d9d9d9">#d9d9d9</color>
+    <color name="color_bfbfbf">#bfbfbf</color>
+    <color name="color_bg_pressed">#d3d3d3</color>
+    <color name="line">#e6e6e6</color>
+    <!-- 实线色值 -->
+    <color name="app_title_color2">#3a3b4b</color>
+    <!-- 实线色值 -->
+    <color name="block_bg">#a26a74</color>
+    <!-- 实线色值 -->
+    <color name="gg">#3399ff</color>
+    <!-- 实线色值 -->
+    <color name="purple_a63a9c">#a63a9c</color>
+    <!-- 实线色值 -->
+    <color name="purple_card_691a85">#691a85</color>
+    <!-- 实线色值 -->
+
+    <color name="bank_card_font">#686872</color>
+    <!-- 实线色值 -->
+    <color name="yellow_bg">#fffab9</color>
+    <!-- 实线色值 -->
+    <color name="light_grey">#dcdcdc</color>>
+    <!--  扫描相关-->
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
+    <color name="text_color_title">#2f2f2f</color>
+    <color name="blue_light">#7FA7C1</color>
+
+    <color name="gs_card_text">#F7D3D4</color>
+    <color name="ny_card_text">#D3E8E2</color>
+    <color name="gd_card_text">#E5DAEB</color>
+    <color name="js_card_text">#D5DCE8</color>
+    <color name="zg_card_text">#ECD4D5</color>
+    <color name="jt_card_text">#D8D9EA</color>
+    <color name="ms_card_text">#DCEAE1</color>
+
+    <color name="level1_green">#28CEC4</color>
+    <color name="level2_blue">#4A90E2</color>
+    <color name="level3_red">#FD5653</color>
+    <color name="level4_purple">#AE4AE2</color>
+    <color name="level5_orange">#F9B61A</color>
+
+    <color name="divider_line">#e1e1e1</color>
+
+    <color name="text_gray">#929292</color>
+
+
+    <color name="activity_color">#F1F1F1</color>
+    <color name="btn_gray">#d1d1d1</color>
+    <color name="black_444444">#444444</color>
+    <color name="black_555555">#555555</color>
+    <color name="black_777777">#777777</color>
+
+
+    <!-- home页面 -->
+    <color name="yellower">#f65e0b</color>
+    <!--assent界面-->
+    <color name="jine">#f47d15</color>
+    <!-- loading -->
+    <color name="loading_bg">#4C4C4C</color>
+
+    <!-- 测试 -->
+    <color name="testreds">#FF3366</color>
+    <color name="testblue">#0033CC</color>
+    <color name="testyellow">#CC9900</color>
+
+
+    <color name="gray3">#575757</color>
+    <color name="gray5">#707070</color>
+    <color name="gray9">#919191</color>
+    <color name="gray10">#262626</color>
+    <color name="jin">#F85908</color>
+
+    <color name="gray4">#636363</color>
+    <color name="gray6">#7b7b7b</color>
+
+    <color name="theme_orange">#ff7f0c</color>
+
+    <color name="title_little_blue">#7888aa</color>
+
+    <color name="pink">#ffb3144e</color>
+    <color name="red">#ffff0101</color>
+    <color name="green">#090</color>
+    <color name="green_light">#66b54a</color>
+    <color name="blue">#009</color>
+    <color name="black">#ff000000</color>
+    <color name="grey">#ff58616d</color>
+    <color name="yellow">#ffff00</color> <!-- 黄色 -->
+    <color name="orange">#f77528</color>
+    <color name="semitransparent">#80000000</color>
+    <color name="lightransparent">#a0000000</color>
+    <color name="line_grey">#cdcfd1</color>
+    <color name="hightransparent">#40000000</color>
+    <color name="app_background_color">#f7f7f7</color>
+    <color name="primary_text_color">#ff282828</color>
+    <color name="secondary_text_color">#ff826e5a</color>
+    <!-- <color name="web_url_color">#ff0165de</color> -->
+    <color name="divider_color">#ffcccccc</color>
+    <color name="lightgrey">#dcdcdc</color>
+    <color name="FontColorRed">#ff562f</color>
+    <color name="FontDarkRed">#FF0000</color>
+    <color name="FontColorBlack">#666666</color>
+    <color name="FontColorBlackLight">#939393</color>
+    <color name="FontColorGreen">#888888</color>
+    <color name="background_tab_pressed">#ffffff</color>
+    <color name="common_bg">#60a958</color>
+    <color name="common_theme_color">#212121</color>
+    <color name="color_yellow">#fda128</color>
+    <color name="text_color_second">#ffb6c7</color>
+    <color name="text_color_summary">#888585</color>
+    <color name="f2f2f2">#fff2f2f2</color>
+    <color name="transparent_05">#0c000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="bill_bind_sms_message">#ff959595</color>
+    <color name="bill_bind_sms_title">#ff222222</color>
+    <color name="black_333333">#333333</color>
+    <color name="black_999999">#999999</color>
+    <color name="left_fram_text_color">#ffcccccc</color>
+    <color name="pink_fb8596">#fb8596</color>
+    <color name="pink_eb7687">#eb7687</color>
+    <color name="bg_color">#ff999999</color>
+    <color name="btn_color">#4bba3a</color>
+    <color name="color_gesture_top_bg">#409907</color>
+    <color name="blue_359df5">#359df5</color>
+    <color name="gray">#ffaaaaaa</color>
+    <color name="yellow_property">#ffff801a</color>
+    <color name="color_ededed">#ededed</color>
+    <color name="color_f5f5f5">#f5f5f5</color>
+    <color name="black_666666">#666666</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_555555">#555555</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_ffffff">#ffffff</color>
+    <color name="color_fcf1f4">#fcf1f4</color>
+    <color name="color_e1ecdc">#e1ecdc</color>
+
+    <color name="bid_line_yellow">#f5a623</color>
+    <color name="bid_line_blue">#63ABFF</color>
+    <color name="bid_line_red">#fc561f</color>
+    <color name="confirm_invest_top_bg">#fa833a</color>
+
+    <color name="ll_info_bg_green">#8dc86c</color>
+    <color name="ll_info_bg_yellow">#ffb130</color>
+
+
+    <color name="total_asset_yellow">#fdb128</color>
+    <color name="total_asset_blue">#4a90e2</color>
+    <color name="total_asset_red">#f46950</color>
+    <color name="total_asset_green">#8ac832</color>
+
+
+    <color name="pig_bank_blue">#16b2f5</color>
+    <color name="msg_black">#2c4051</color>
+    <color name="text_gray_next">#9b9b9b</color>
+    <color name="text_search_hint">#b8b8b8</color>
+    <color name="text_web_title">#181b22</color>
+    <color name="text_dark">#1a1e28</color>
+    <color name="app_bg_color5">#b2b2b2</color>
+
+    <!-- background-image:linear-gradient(-180deg, #0796ee 2%, #16b2f5 99%);
+     width:375px;
+     height:182px;-->
+    font-family:.PingFangSC-Regular;
+    font-size:14px;
+    color:#fc561f;
+</resources>

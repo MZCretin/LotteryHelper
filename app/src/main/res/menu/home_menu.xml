@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/option_normal_1"
+        android:icon="@mipmap/fenxiang"
+        android:title="分享"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/option_normal_2"
+        android:icon="@mipmap/fankui"
+        android:title="反馈"
+        app:showAsAction="always"/>
+
+</menu>

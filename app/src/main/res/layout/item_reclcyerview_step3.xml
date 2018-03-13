@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="20dp"
+            android:text="第三步：输入您购买的彩票期号(系统可能会识别出您的期号，请检查正确性)，然后点击按钮分析您的中奖状态"
+            android:textColor="@color/font_black1"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+
+        <EditText
+            android:id="@+id/tv_kjq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_button_border_blue"
+            android:gravity="center"
+            android:minWidth="150dp"
+            android:textColor="@color/font_black4"
+            android:padding="8dp"
+            android:hint="请输入期号"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_newest"
+            android:layout_marginRight="100dp"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="最新一期?"
+            android:textColor="@color/font_orange"
+            android:textSize="10sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_fenxi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_button_round100_color"
+            android:paddingBottom="10dp"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:paddingTop="10dp"
+            android:text="立即分析中奖情况"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

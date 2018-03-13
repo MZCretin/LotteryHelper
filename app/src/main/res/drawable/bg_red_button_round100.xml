@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><!--<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+  <solid android:color="@color/app_title_color" />
+  <corners android:radius="4dp"/>
+</shape>-->
+
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/font_black4" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/block_bg" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</selector>
