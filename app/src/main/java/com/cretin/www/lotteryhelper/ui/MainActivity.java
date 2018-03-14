@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -285,11 +284,51 @@ public class MainActivity extends BaseActicity {
                 helper.setText(R.id.tv_no7, item.getNo7());
                 helper.setText(R.id.tv_num, item.getNum());
                 helper.setText(R.id.tv_result, "分析结果：" + item.getResult());
+
+                //显示
+                setViewShow(item.getIndexs(), helper);
             } else if ( item.getType() == ItemModel.TYPE_STEP4 ) {
                 //第四步
                 helper.setText(R.id.tv_tips_qihao, item.getKjq() + "期中奖号码为");
                 helper.setText(R.id.tv_haoma, item.getOpenCode().replaceAll(",", "、"));
             }
+        }
+
+        private void setViewShow(List<Integer> index, BaseViewHolder helper) {
+            //先隐藏所有勾
+            helper.setVisible(R.id.iv_1, false);
+            helper.setVisible(R.id.iv_2, false);
+            helper.setVisible(R.id.iv_3, false);
+            helper.setVisible(R.id.iv_4, false);
+            helper.setVisible(R.id.iv_5, false);
+            helper.setVisible(R.id.iv_6, false);
+            helper.setVisible(R.id.iv_7, false);
+            for ( int i : index ) {
+                switch ( i + 1 ) {
+                    case 1:
+                        helper.setVisible(R.id.iv_1, true);
+                        break;
+                    case 2:
+                        helper.setVisible(R.id.iv_2, true);
+                        break;
+                    case 3:
+                        helper.setVisible(R.id.iv_3, true);
+                        break;
+                    case 4:
+                        helper.setVisible(R.id.iv_4, true);
+                        break;
+                    case 5:
+                        helper.setVisible(R.id.iv_5, true);
+                        break;
+                    case 6:
+                        helper.setVisible(R.id.iv_6, true);
+                        break;
+                    case 7:
+                        helper.setVisible(R.id.iv_7, true);
+                        break;
+                }
+            }
+
         }
 
     }
@@ -346,20 +385,25 @@ public class MainActivity extends BaseActicity {
         }
         int[] nums = new int[temp.size()];
         int[] results = new int[temp.size()];
+        List<Integer>[] indexs = new ArrayList[temp.size()];
+        for ( int i = 0; i < indexs.length; i++ ) {
+            indexs[i] = new ArrayList<Integer>();
+        }
         for ( int i = 0; i < aims.size(); i++ ) {
             for ( int k = 0; k < temp.size(); k++ ) {
                 ItemModel itemModel = temp.get(k);
                 HH:
                 for ( int j = 0; j < itemModel.getList().size(); j++ ) {
                     if ( itemModel.getList().get(j).equals(aims.get(i)) ) {
-                        itemModel.getList().remove(j);
                         nums[k]++;
+                        indexs[k].add(j);
                         break HH;
                     }
                 }
                 if ( lanHao.equals(itemModel.getNo7()) ) {
                     //蓝号正确
                     results[k] = 1;
+                    indexs[k].add(6);
                 } else {
                     //蓝号不正确
                     results[k] = 0;
@@ -369,6 +413,7 @@ public class MainActivity extends BaseActicity {
         for ( int i = 0; i < results.length; i++ ) {
             String result = nums[i] + "+" + results[i] + "(" + CommonUtils.lotteryResult(nums[i], results[i]) + ")";
             ItemModel itemModel = temp.get(i);
+            itemModel.setIndexs(indexs[i]);
             itemModel.setResult(result);
         }
         list.addAll(temp);
@@ -422,7 +467,7 @@ public class MainActivity extends BaseActicity {
         //找到开奖期:
         String kjq = null;
         for ( ResultModel.WordsResultBean wordsResultBean : result.getWords_result() ) {
-            Log.e("HHHHHHHH", wordsResultBean.getWords());
+//            Log.e("HHHHHHHH", wordsResultBean.getWords());
             if ( matcher(wordsResultBean.getWords()) != null ) {
                 //匹配到了
                 listNums.add(wordsResultBean.getWords());

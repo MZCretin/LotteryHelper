@@ -36,6 +36,17 @@ public class ItemModel implements MultiItemEntity {
     //开奖号码
     private String openCode;
 
+    //记录中奖的下表集合
+    private List<Integer> indexs;
+
+    public List<Integer> getIndexs() {
+        return indexs;
+    }
+
+    public void setIndexs(List<Integer> indexs) {
+        this.indexs = indexs;
+    }
+
     public String getOpenCode() {
         return openCode;
     }
