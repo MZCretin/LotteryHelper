@@ -31,13 +31,14 @@ import com.baidu.ocr.ui.camera.CameraActivity;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.cretin.www.httpurlconnectionutil.HttpUtils;
+import com.cretin.www.httpurlconnectionutil.callback.HttpCallbackStringListener;
 import com.cretin.www.lotteryhelper.R;
 import com.cretin.www.lotteryhelper.base.BaseActicity;
 import com.cretin.www.lotteryhelper.base.BaseApp;
-import com.cretin.www.lotteryhelper.base.Console;
-import com.cretin.www.lotteryhelper.model.ItemModel;
+import com.cretin.www.lotteryhelper.model.LotteryItemModel;
 import com.cretin.www.lotteryhelper.model.LotteryModel;
-import com.cretin.www.lotteryhelper.model.ResultModel;
+import com.cretin.www.lotteryhelper.model.OCRResultModel;
 import com.cretin.www.lotteryhelper.ui.view.MyAlertDialog;
 import com.cretin.www.lotteryhelper.utils.CommonUtils;
 import com.cretin.www.lotteryhelper.utils.FileUtil;
@@ -45,8 +46,9 @@ import com.cretin.www.lotteryhelper.utils.KV;
 import com.cretin.www.lotteryhelper.utils.LocalStorageKeys;
 import com.cretin.www.lotteryhelper.utils.RecognizeService;
 import com.google.gson.Gson;
-import com.show.api.ShowApiRequest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,7 +71,7 @@ public class MainActivity extends BaseActicity {
     private ListAdapter adapter;
 
     //保存当前所有Item数据
-    private List<ItemModel> list;
+    private List<LotteryItemModel> list;
 
     //当前点击的彩票号所在的位置
     private int currIndex;
@@ -190,19 +192,19 @@ public class MainActivity extends BaseActicity {
         startActivityForResult(intent, REQUEST_CODE_ACCURATE_BASIC);
     }
 
-    class ListAdapter extends BaseMultiItemQuickAdapter<ItemModel, BaseViewHolder> {
+    class ListAdapter extends BaseMultiItemQuickAdapter<LotteryItemModel, BaseViewHolder> {
 
-        public ListAdapter(Context context, List<ItemModel> data) {
+        public ListAdapter(Context context, List<LotteryItemModel> data) {
             super(data);
-            addItemType(ItemModel.TYPE_NO, R.layout.item_reclcyerview_no);
-            addItemType(ItemModel.TYPE_DONE, R.layout.item_reclcyerview_done);
-            addItemType(ItemModel.TYPE_STEP3, R.layout.item_reclcyerview_step3);
-            addItemType(ItemModel.TYPE_STEP4, R.layout.item_reclcyerview_step4);
+            addItemType(LotteryItemModel.TYPE_NO, R.layout.item_reclcyerview_no);
+            addItemType(LotteryItemModel.TYPE_DONE, R.layout.item_reclcyerview_done);
+            addItemType(LotteryItemModel.TYPE_STEP3, R.layout.item_reclcyerview_step3);
+            addItemType(LotteryItemModel.TYPE_STEP4, R.layout.item_reclcyerview_step4);
         }
 
         @Override
-        protected void convert(final BaseViewHolder helper, final ItemModel item) {
-            if ( item.getType() == ItemModel.TYPE_NO ) {
+        protected void convert(final BaseViewHolder helper, final LotteryItemModel item) {
+            if ( item.getType() == LotteryItemModel.TYPE_NO ) {
                 //正常号码
                 helper.setText(R.id.tv_bianhao, item.getIndex());
                 helper.setText(R.id.tv_no1, item.getNo1());
@@ -222,7 +224,7 @@ public class MainActivity extends BaseActicity {
                 helper.addOnClickListener(R.id.tv_no6);
                 helper.addOnClickListener(R.id.tv_no7);
 
-            } else if ( item.getType() == ItemModel.TYPE_STEP3 ) {
+            } else if ( item.getType() == LotteryItemModel.TYPE_STEP3 ) {
                 //第三步
                 if ( !TextUtils.isEmpty(item.getKjq()) ) {
                     helper.setText(R.id.tv_kjq, item.getKjq());
@@ -257,11 +259,11 @@ public class MainActivity extends BaseActicity {
                         String kjq = (( EditText ) helper.getView(R.id.tv_kjq)).getText().toString();
                         if ( !TextUtils.isEmpty(kjq) && kjq.length() == 7 ) {
                             //删除之前的数据
-                            Iterator<ItemModel> it = list.iterator();
+                            Iterator<LotteryItemModel> it = list.iterator();
                             while ( it.hasNext() ) {
-                                ItemModel x = it.next();
-                                if ( x.getType() == ItemModel.TYPE_DONE
-                                        || x.getType() == ItemModel.TYPE_STEP4 ) {
+                                LotteryItemModel x = it.next();
+                                if ( x.getType() == LotteryItemModel.TYPE_DONE
+                                        || x.getType() == LotteryItemModel.TYPE_STEP4 ) {
                                     it.remove();
                                 }
                             }
@@ -273,7 +275,7 @@ public class MainActivity extends BaseActicity {
                         }
                     }
                 });
-            } else if ( item.getType() == ItemModel.TYPE_DONE ) {
+            } else if ( item.getType() == LotteryItemModel.TYPE_DONE ) {
                 helper.setText(R.id.tv_bianhao, item.getIndex());
                 helper.setText(R.id.tv_no1, item.getNo1());
                 helper.setText(R.id.tv_no2, item.getNo2());
@@ -287,7 +289,7 @@ public class MainActivity extends BaseActicity {
 
                 //显示
                 setViewShow(item.getIndexs(), helper);
-            } else if ( item.getType() == ItemModel.TYPE_STEP4 ) {
+            } else if ( item.getType() == LotteryItemModel.TYPE_STEP4 ) {
                 //第四步
                 helper.setText(R.id.tv_tips_qihao, item.getKjq() + "期中奖号码为");
                 helper.setText(R.id.tv_haoma, item.getOpenCode().replaceAll(",", "、"));
@@ -371,15 +373,15 @@ public class MainActivity extends BaseActicity {
 
     //计算最终结果
     private void calcu(List<String> aims, String lanHao, String openCode, String kjq) {
-        list.add(new ItemModel(ItemModel.TYPE_STEP4, openCode, kjq));
+        list.add(new LotteryItemModel(LotteryItemModel.TYPE_STEP4, openCode, kjq));
         //获取public static final int TYPE_NO = 0的集合
-        List<ItemModel> temp = new ArrayList<>();
-        ItemModel tempItem = null;
-        for ( ItemModel itemModel : list ) {
-            if ( itemModel.getType() == ItemModel.TYPE_NO ) {
-                tempItem = new ItemModel();
+        List<LotteryItemModel> temp = new ArrayList<>();
+        LotteryItemModel tempItem = null;
+        for ( LotteryItemModel itemModel : list ) {
+            if ( itemModel.getType() == LotteryItemModel.TYPE_NO ) {
+                tempItem = new LotteryItemModel();
                 CommonUtils.copyProperties(tempItem, itemModel);
-                tempItem.setType(ItemModel.TYPE_DONE);
+                tempItem.setType(LotteryItemModel.TYPE_DONE);
                 temp.add(tempItem);
             }
         }
@@ -391,7 +393,7 @@ public class MainActivity extends BaseActicity {
         }
         for ( int i = 0; i < aims.size(); i++ ) {
             for ( int k = 0; k < temp.size(); k++ ) {
-                ItemModel itemModel = temp.get(k);
+                LotteryItemModel itemModel = temp.get(k);
                 HH:
                 for ( int j = 0; j < itemModel.getList().size(); j++ ) {
                     if ( itemModel.getList().get(j).equals(aims.get(i)) ) {
@@ -412,7 +414,7 @@ public class MainActivity extends BaseActicity {
         }
         for ( int i = 0; i < results.length; i++ ) {
             String result = nums[i] + "+" + results[i] + "(" + CommonUtils.lotteryResult(nums[i], results[i]) + ")";
-            ItemModel itemModel = temp.get(i);
+            LotteryItemModel itemModel = temp.get(i);
             itemModel.setIndexs(indexs[i]);
             itemModel.setResult(result);
         }
@@ -439,9 +441,9 @@ public class MainActivity extends BaseActicity {
     private void getPicText() {
         showDialog();
         RecognizeService.recAccurateBasic(FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath(),
-                new RecognizeService.ServiceListener<ResultModel>() {
+                new RecognizeService.ServiceListener<OCRResultModel>() {
                     @Override
-                    public void onResult(ResultModel result) {
+                    public void onResult(OCRResultModel result) {
                         times = 0;
                         formatData(result);
                         stopDialog();
@@ -461,12 +463,12 @@ public class MainActivity extends BaseActicity {
     }
 
     //解析数据
-    private void formatData(ResultModel result) {
+    private void formatData(OCRResultModel result) {
         List<String> listNums = new ArrayList<>();
         //在这里我需要获取到开奖期 和 购买的几组号码
         //找到开奖期:
         String kjq = null;
-        for ( ResultModel.WordsResultBean wordsResultBean : result.getWords_result() ) {
+        for ( OCRResultModel.WordsResultBean wordsResultBean : result.getWords_result() ) {
 //            Log.e("HHHHHHHH", wordsResultBean.getWords());
             if ( matcher(wordsResultBean.getWords()) != null ) {
                 //匹配到了
@@ -497,7 +499,7 @@ public class MainActivity extends BaseActicity {
                 }
             }
 
-            list.add(i, new ItemModel(content.substring(2, 4), content.substring(4, 6)
+            list.add(i, new LotteryItemModel(content.substring(2, 4), content.substring(4, 6)
                     , content.substring(6, 8), content.substring(8, 10), content.substring(10, 12)
                     , content.substring(12, 14), content.contains("+") ? content.substring(15, 17) : content.substring(14, 16), content.substring(0, 2), nums));
         }
@@ -505,7 +507,7 @@ public class MainActivity extends BaseActicity {
         ll_bianhao.setVisibility(View.VISIBLE);
         tvStep2.setVisibility(View.VISIBLE);
 
-        list.add(new ItemModel(ItemModel.TYPE_STEP3, kjq));
+        list.add(new LotteryItemModel(LotteryItemModel.TYPE_STEP3, kjq));
         //添加开奖期这个
         adapter.notifyDataSetChanged();
     }
@@ -593,26 +595,45 @@ public class MainActivity extends BaseActicity {
 
     private void doPost(final String expect, final PostResultListener listener) {
         showDialog();
-        new Thread() {
-            //在新线程中发送网络请求
-            public void run() {
-                final String res = new ShowApiRequest("http://route.showapi.com/44-3",
-                        Console.APP_ID_API, Console.APP_SECRET_API)
-                        .addTextPara("code", "ssq")
-                        .addTextPara("expect", expect)
-                        .post();
-                //把返回内容通过handler对象更新到界面
-                mHandler.post(new Thread() {
-                    public void run() {
-                        if ( gson == null ) {
-                            gson = new Gson();
-                        }
-                        listener.result(gson.fromJson(res, LotteryModel.class));
-                        stopDialog();
-                    }
-                });
-            }
-        }.start();
+
+        //返回字符串
+        try {
+            HttpUtils.doGet(this, "http://caipu.yjghost.com/index.php/query/read?menu=" + URLEncoder.encode("土豆", "UTF-8") + "&rn=15&start=1", new HttpCallbackStringListener() {
+
+                @Override
+                public void onFinish(String response) {
+//                    tvContent.setText(response);
+                }
+
+                @Override
+                public void onError(Exception e) {
+//                    tvContent.setText(e.toString());
+                }
+            });
+        } catch ( UnsupportedEncodingException e ) {
+            e.printStackTrace();
+        }
+
+//        new Thread() {
+//            //在新线程中发送网络请求
+//            public void run() {
+//                final String res = new ShowApiRequest("http://route.showapi.com/44-3",
+//                        Console.APP_ID_API, Console.APP_SECRET_API)
+//                        .addTextPara("code", "ssq")
+//                        .addTextPara("expect", expect)
+//                        .post();
+//                //把返回内容通过handler对象更新到界面
+//                mHandler.post(new Thread() {
+//                    public void run() {
+//                        if ( gson == null ) {
+//                            gson = new Gson();
+//                        }
+//                        listener.result(gson.fromJson(res, LotteryModel.class));
+//                        stopDialog();
+//                    }
+//                });
+//            }
+//        }.start();
     }
 
     interface PostResultListener {
@@ -674,7 +695,7 @@ public class MainActivity extends BaseActicity {
         pickerRed.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                ItemModel itemModel = list.get(currPosition);
+                LotteryItemModel itemModel = list.get(currPosition);
                 CommonUtils.setData(currIndex, itemModel, item);
                 adapter.notifyDataSetChanged();
             }
@@ -709,7 +730,7 @@ public class MainActivity extends BaseActicity {
         pickerBlue.setOnItemPickListener(new OnItemPickListener<String>() {
             @Override
             public void onItemPicked(int index, String item) {
-                ItemModel itemModel = list.get(currPosition);
+                LotteryItemModel itemModel = list.get(currPosition);
                 CommonUtils.setData(currIndex, itemModel, item);
                 adapter.notifyDataSetChanged();
             }

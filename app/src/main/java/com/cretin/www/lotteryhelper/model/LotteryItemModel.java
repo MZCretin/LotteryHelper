@@ -9,7 +9,7 @@ import java.util.List;
  * Created by cretin on 2018/3/12.
  */
 
-public class ItemModel implements MultiItemEntity {
+public class LotteryItemModel implements MultiItemEntity {
     public static final int TYPE_NO = 0;
     public static final int TYPE_DONE = 1;
     public static final int TYPE_STEP3 = 2;
@@ -73,22 +73,22 @@ public class ItemModel implements MultiItemEntity {
         this.kjq = kjq;
     }
 
-    public ItemModel() {
+    public LotteryItemModel() {
     }
 
-    public ItemModel(int type,String openCode,String kjq) {
+    public LotteryItemModel(int type, String openCode, String kjq) {
         this.type = type;
         this.openCode = openCode;
         this.kjq = kjq;
     }
 
-    public ItemModel(int type, String kjq) {
+    public LotteryItemModel(int type, String kjq) {
         this.type = type;
         this.kjq = kjq;
     }
 
     //public static final int TYPE_NO = 0;专用
-    public ItemModel(String no1, String no2, String no3, String no4, String no5, String no6, String no7, String index, String num) {
+    public LotteryItemModel(String no1, String no2, String no3, String no4, String no5, String no6, String no7, String index, String num) {
         this.no1 = no1;
         this.no2 = no2;
         this.no3 = no3;

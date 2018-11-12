@@ -6,7 +6,7 @@ import java.util.List;
  * Created by cretin on 2018/3/12.
  */
 
-public class ResultModel {
+public class OCRResultModel {
 
     /**
      * log_id : 7193850910569581187

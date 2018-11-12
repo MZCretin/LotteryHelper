@@ -1,6 +1,6 @@
 package com.cretin.www.lotteryhelper.utils;
 
-import com.cretin.www.lotteryhelper.model.ItemModel;
+import com.cretin.www.lotteryhelper.model.LotteryItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CommonUtils {
 
-    public static void copyProperties(ItemModel desc, ItemModel orign) {
+    public static void copyProperties(LotteryItemModel desc, LotteryItemModel orign) {
         if ( orign != null ) {
             desc.setType(orign.getType());
             desc.setResult(orign.getResult());
@@ -83,7 +83,7 @@ public class CommonUtils {
      * @param itemModel
      * @param item
      */
-    public static void setData(int currIndex, ItemModel itemModel, String item) {
+    public static void setData(int currIndex, LotteryItemModel itemModel, String item) {
         switch ( currIndex ) {
             case 1:
                 itemModel.setNo1(item);
@@ -114,9 +114,9 @@ public class CommonUtils {
      *
      * @param list
      */
-    public static void resetData(List<ItemModel> list) {
+    public static void resetData(List<LotteryItemModel> list) {
         List<String> l = null;
-        for ( ItemModel item :
+        for ( LotteryItemModel item :
                 list ) {
             l = new ArrayList<>();
             l.add(item.getNo1());

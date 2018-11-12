@@ -33,4 +33,5 @@ dependencies {
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
     compile 'com.github.addappcn:android-pickers:1.0.2'
     compile 'com.github.orhanobut:hawk:1.21'
+    implementation project(':httpurlconnectionutil')
 }
