@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -105,13 +106,13 @@ public class MainActivity extends BaseActicity {
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 //获取到当前点击的视图的数据
                 currPosition = position;
-                int index = Integer.parseInt((( TextView ) view).getText().toString());
-                if ( view.getId() != R.id.tv_no7 ) {
+                int index = Integer.parseInt(((TextView) view).getText().toString());
+                if (view.getId() != R.id.tv_no7) {
                     initDatePickerRed(index);
                 } else {
                     initDatePickerBlue(index);
                 }
-                switch ( view.getId() ) {
+                switch (view.getId()) {
                     case R.id.tv_no1:
                         currIndex = 1;
                         break;
@@ -163,7 +164,7 @@ public class MainActivity extends BaseActicity {
         view.findViewById(R.id.tv_open).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( KV.get(LocalStorageKeys.IS_FIRST, true) ) {
+                if (KV.get(LocalStorageKeys.IS_FIRST, true)) {
                     //第一次的话先显示说明
                     showCustomDialog();
                     KV.put(LocalStorageKeys.IS_FIRST, false);
@@ -181,7 +182,7 @@ public class MainActivity extends BaseActicity {
 
     //打开相机
     private void openCamera() {
-        if ( !checkTokenStatus() ) {
+        if (!checkTokenStatus()) {
             return;
         }
         Intent intent = new Intent(MainActivity.this, CameraActivity.class);
@@ -204,7 +205,7 @@ public class MainActivity extends BaseActicity {
 
         @Override
         protected void convert(final BaseViewHolder helper, final LotteryItemModel item) {
-            if ( item.getType() == LotteryItemModel.TYPE_NO ) {
+            if (item.getType() == LotteryItemModel.TYPE_NO) {
                 //正常号码
                 helper.setText(R.id.tv_bianhao, item.getIndex());
                 helper.setText(R.id.tv_no1, item.getNo1());
@@ -224,9 +225,9 @@ public class MainActivity extends BaseActicity {
                 helper.addOnClickListener(R.id.tv_no6);
                 helper.addOnClickListener(R.id.tv_no7);
 
-            } else if ( item.getType() == LotteryItemModel.TYPE_STEP3 ) {
+            } else if (item.getType() == LotteryItemModel.TYPE_STEP3) {
                 //第三步
-                if ( !TextUtils.isEmpty(item.getKjq()) ) {
+                if (!TextUtils.isEmpty(item.getKjq())) {
                     helper.setText(R.id.tv_kjq, item.getKjq());
                 }
 
@@ -234,18 +235,45 @@ public class MainActivity extends BaseActicity {
                 helper.getView(R.id.tv_newest).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        showDialog();
                         doPost("", new PostResultListener() {
                             @Override
-                            public void result(LotteryModel result) {
-                                if ( result.getShowapi_res_body() != null ) {
-                                    final LotteryModel.ShowapiResBodyBean.ResultBean result1
-                                            = result.getShowapi_res_body().getResult();
-                                    showMsgDialog("最新一期是" + result1.getExpect() + ",填入？", new MyAlertDialog.OnPositiveClickListener() {
-                                        @Override
-                                        public void onPositiveClickListener(View v) {
-                                            helper.setText(R.id.tv_kjq, result1.getExpect());
-                                        }
-                                    });
+                            public void result(final LotteryModel result) {
+                                if (result.getCode() != 0) {
+                                    stopDialog();
+                                    final LotteryModel.DataBean result1 = result.getData();
+                                    if (result1 != null) {
+                                        showMsgDialog("最新一期是" + result1.getExpect() + ",是否与你的彩票期号匹配？", new MyAlertDialog.OnPositiveClickListener() {
+                                            @Override
+                                            public void onPositiveClickListener(View v) {
+                                                helper.setText(R.id.tv_kjq, result1.getExpect());
+
+                                                if (result.getCode() != 0) {
+                                                    if (result1 != null) {
+                                                        //有数据
+                                                        //分析中奖号码 02,07,09,14,18,28+05
+                                                        String openCode = result1.getOpenCode();
+                                                        String[] split = openCode.split(",");
+                                                        List<String> aims = new ArrayList<>();
+                                                        String lanHao = "";
+                                                        for (int i = 0; i < split.length; i++) {
+                                                            if (i < split.length - 1) {
+                                                                aims.add(split[i]);
+                                                            } else {
+                                                                //最后一个
+                                                                aims.add(split[i].split("\\+")[0]);
+                                                                lanHao = split[i].split("\\+")[1];
+                                                            }
+                                                        }
+                                                        //计算结果
+                                                        calcu(aims, lanHao, openCode, result1.getExpect());
+                                                    }
+                                                } else {
+                                                    Toast.makeText(MainActivity.this, "服务器异常，请稍后再试", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         });
@@ -256,14 +284,15 @@ public class MainActivity extends BaseActicity {
                 helper.getView(R.id.tv_fenxi).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String kjq = (( EditText ) helper.getView(R.id.tv_kjq)).getText().toString();
-                        if ( !TextUtils.isEmpty(kjq) && kjq.length() == 7 ) {
+                        showDialog("正在计算...",false);
+                        String kjq = ((EditText) helper.getView(R.id.tv_kjq)).getText().toString();
+                        if (!TextUtils.isEmpty(kjq) && kjq.length() == 7) {
                             //删除之前的数据
                             Iterator<LotteryItemModel> it = list.iterator();
-                            while ( it.hasNext() ) {
+                            while (it.hasNext()) {
                                 LotteryItemModel x = it.next();
-                                if ( x.getType() == LotteryItemModel.TYPE_DONE
-                                        || x.getType() == LotteryItemModel.TYPE_STEP4 ) {
+                                if (x.getType() == LotteryItemModel.TYPE_DONE
+                                        || x.getType() == LotteryItemModel.TYPE_STEP4) {
                                     it.remove();
                                 }
                             }
@@ -275,7 +304,7 @@ public class MainActivity extends BaseActicity {
                         }
                     }
                 });
-            } else if ( item.getType() == LotteryItemModel.TYPE_DONE ) {
+            } else if (item.getType() == LotteryItemModel.TYPE_DONE) {
                 helper.setText(R.id.tv_bianhao, item.getIndex());
                 helper.setText(R.id.tv_no1, item.getNo1());
                 helper.setText(R.id.tv_no2, item.getNo2());
@@ -289,7 +318,7 @@ public class MainActivity extends BaseActicity {
 
                 //显示
                 setViewShow(item.getIndexs(), helper);
-            } else if ( item.getType() == LotteryItemModel.TYPE_STEP4 ) {
+            } else if (item.getType() == LotteryItemModel.TYPE_STEP4) {
                 //第四步
                 helper.setText(R.id.tv_tips_qihao, item.getKjq() + "期中奖号码为");
                 helper.setText(R.id.tv_haoma, item.getOpenCode().replaceAll(",", "、"));
@@ -305,8 +334,8 @@ public class MainActivity extends BaseActicity {
             helper.setVisible(R.id.iv_5, false);
             helper.setVisible(R.id.iv_6, false);
             helper.setVisible(R.id.iv_7, false);
-            for ( int i : index ) {
-                switch ( i + 1 ) {
+            for (int i : index) {
+                switch (i + 1) {
                     case 1:
                         helper.setVisible(R.id.iv_1, true);
                         break;
@@ -340,19 +369,18 @@ public class MainActivity extends BaseActicity {
         doPost(kjq, new PostResultListener() {
             @Override
             public void result(LotteryModel result) {
-                if ( result.getShowapi_res_body() != null ) {
-                    LotteryModel.ShowapiResBodyBean.ResultBean result1
-                            = result.getShowapi_res_body().getResult();
-                    if ( result1 != null ) {
+                if (result.getCode() != 0) {
+                    LotteryModel.DataBean result1 = result.getData();
+                    if (result1 != null) {
                         //有数据
-                        if ( kjq.equals(result1.getExpect()) ) {
+                        if (kjq.equals(result1.getExpect())) {
                             //分析中奖号码 02,07,09,14,18,28+05
                             String openCode = result1.getOpenCode();
                             String[] split = openCode.split(",");
                             List<String> aims = new ArrayList<>();
                             String lanHao = "";
-                            for ( int i = 0; i < split.length; i++ ) {
-                                if ( i < split.length - 1 ) {
+                            for (int i = 0; i < split.length; i++) {
+                                if (i < split.length - 1) {
                                     aims.add(split[i]);
                                 } else {
                                     //最后一个
@@ -362,11 +390,12 @@ public class MainActivity extends BaseActicity {
                             }
                             //计算结果
                             calcu(aims, lanHao, openCode, kjq);
-                            return;
                         }
                     }
+                }else {
+                    Toast.makeText(MainActivity.this, "未查到该期彩票，请检查期号", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(MainActivity.this, "未查到该期彩票，请检查期号", Toast.LENGTH_SHORT).show();
+                stopDialog();
             }
         });
     }
@@ -377,8 +406,8 @@ public class MainActivity extends BaseActicity {
         //获取public static final int TYPE_NO = 0的集合
         List<LotteryItemModel> temp = new ArrayList<>();
         LotteryItemModel tempItem = null;
-        for ( LotteryItemModel itemModel : list ) {
-            if ( itemModel.getType() == LotteryItemModel.TYPE_NO ) {
+        for (LotteryItemModel itemModel : list) {
+            if (itemModel.getType() == LotteryItemModel.TYPE_NO) {
                 tempItem = new LotteryItemModel();
                 CommonUtils.copyProperties(tempItem, itemModel);
                 tempItem.setType(LotteryItemModel.TYPE_DONE);
@@ -388,21 +417,21 @@ public class MainActivity extends BaseActicity {
         int[] nums = new int[temp.size()];
         int[] results = new int[temp.size()];
         List<Integer>[] indexs = new ArrayList[temp.size()];
-        for ( int i = 0; i < indexs.length; i++ ) {
+        for (int i = 0; i < indexs.length; i++) {
             indexs[i] = new ArrayList<Integer>();
         }
-        for ( int i = 0; i < aims.size(); i++ ) {
-            for ( int k = 0; k < temp.size(); k++ ) {
+        for (int i = 0; i < aims.size(); i++) {
+            for (int k = 0; k < temp.size(); k++) {
                 LotteryItemModel itemModel = temp.get(k);
                 HH:
-                for ( int j = 0; j < itemModel.getList().size(); j++ ) {
-                    if ( itemModel.getList().get(j).equals(aims.get(i)) ) {
+                for (int j = 0; j < itemModel.getList().size(); j++) {
+                    if (itemModel.getList().get(j).equals(aims.get(i))) {
                         nums[k]++;
                         indexs[k].add(j);
                         break HH;
                     }
                 }
-                if ( lanHao.equals(itemModel.getNo7()) ) {
+                if (lanHao.equals(itemModel.getNo7())) {
                     //蓝号正确
                     results[k] = 1;
                     indexs[k].add(6);
@@ -412,7 +441,7 @@ public class MainActivity extends BaseActicity {
                 }
             }
         }
-        for ( int i = 0; i < results.length; i++ ) {
+        for (int i = 0; i < results.length; i++) {
             String result = nums[i] + "+" + results[i] + "(" + CommonUtils.lotteryResult(nums[i], results[i]) + ")";
             LotteryItemModel itemModel = temp.get(i);
             itemModel.setIndexs(indexs[i]);
@@ -429,8 +458,8 @@ public class MainActivity extends BaseActicity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // 识别成功回调，通用文字识别（高精度版）
-        if ( requestCode == REQUEST_CODE_ACCURATE_BASIC
-                && resultCode == Activity.RESULT_OK ) {
+        if (requestCode == REQUEST_CODE_ACCURATE_BASIC
+                && resultCode == Activity.RESULT_OK) {
             times = 0;
             getPicText();
         }
@@ -440,26 +469,31 @@ public class MainActivity extends BaseActicity {
 
     private void getPicText() {
         showDialog();
-        RecognizeService.recAccurateBasic(FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath(),
-                new RecognizeService.ServiceListener<OCRResultModel>() {
-                    @Override
-                    public void onResult(OCRResultModel result) {
-                        times = 0;
-                        formatData(result);
-                        stopDialog();
-                    }
-
-                    @Override
-                    public void onError(String result) {
-                        times++;
-                        if ( times < 3 ) {
-                            getPicText();
-                        } else {
-                            Toast.makeText(MainActivity.this, "网络错误，请重试", Toast.LENGTH_SHORT).show();
+        try {
+            RecognizeService.recAccurateBasic(FileUtil.getSaveFile(this).getAbsolutePath(),
+                    new RecognizeService.ServiceListener<OCRResultModel>() {
+                        @Override
+                        public void onResult(OCRResultModel result) {
+                            times = 0;
+                            formatData(result);
                             stopDialog();
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(String result) {
+                            times++;
+                            if (times < 3) {
+                                getPicText();
+                            } else {
+                                Toast.makeText(MainActivity.this, "网络错误，请重试", Toast.LENGTH_SHORT).show();
+                                stopDialog();
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            Toast.makeText(MainActivity.this, "网络错误，请重试", Toast.LENGTH_SHORT).show();
+            stopDialog();
+        }
     }
 
     //解析数据
@@ -468,14 +502,14 @@ public class MainActivity extends BaseActicity {
         //在这里我需要获取到开奖期 和 购买的几组号码
         //找到开奖期:
         String kjq = null;
-        for ( OCRResultModel.WordsResultBean wordsResultBean : result.getWords_result() ) {
+        for (OCRResultModel.WordsResultBean wordsResultBean : result.getWords_result()) {
 //            Log.e("HHHHHHHH", wordsResultBean.getWords());
-            if ( matcher(wordsResultBean.getWords()) != null ) {
+            if (matcher(wordsResultBean.getWords()) != null) {
                 //匹配到了
                 listNums.add(wordsResultBean.getWords());
             } else {
-                if ( !TextUtils.isEmpty(wordsResultBean.getWords()) ) {
-                    if ( wordsResultBean.getWords().startsWith("开奖期") ) {
+                if (!TextUtils.isEmpty(wordsResultBean.getWords())) {
+                    if (wordsResultBean.getWords().startsWith("开奖期")) {
                         kjq = matcher(wordsResultBean.getWords(), 1);
                     }
                 }
@@ -483,16 +517,16 @@ public class MainActivity extends BaseActicity {
         }
 
         //构造数据
-        for ( int i = 0; i < listNums.size(); i++ ) {
+        for (int i = 0; i < listNums.size(); i++) {
             String content = listNums.get(i);
             //先获取各个号码
             String nums = "";
-            if ( content.contains("x") ) {
+            if (content.contains("x")) {
                 nums = content.substring(content.indexOf("x") + 1);
-            } else if ( content.contains("X") ) {
+            } else if (content.contains("X")) {
                 nums = content.substring(content.indexOf("X") + 1);
             } else {
-                if ( content.contains("+") ) {
+                if (content.contains("+")) {
                     nums = content.substring(17, content.length());
                 } else {
                     nums = content.substring(16, content.length());
@@ -521,7 +555,7 @@ public class MainActivity extends BaseActicity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch ( item.getItemId() ) {
+        switch (item.getItemId()) {
             case R.id.option_normal_1:
                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                 intent1.putExtra(Intent.EXTRA_TEXT, "给你分享一个免费好用的福彩对号助手，复制链接去浏览器打开下载使用吧！链接：" +
@@ -553,13 +587,13 @@ public class MainActivity extends BaseActicity {
     private String matcher(String content, int type) {
         content = content.replaceAll(" ", "");
         String pattern = "^[A-Z].[0-9]{12}\\+?[0-9]{2}x?[0-9]+$";
-        if ( type == 1 ) {
+        if (type == 1) {
             pattern = "[0-9]{7}";
         }
         Pattern test_ = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = test_.matcher(content);
-        if ( matcher.find() ) {
-            if ( type == 1 ) {
+        if (matcher.find()) {
+            if (type == 1) {
                 return matcher.group();
             }
             //找到了
@@ -575,8 +609,8 @@ public class MainActivity extends BaseActicity {
 
 
     private boolean checkTokenStatus() {
-        if ( !BaseApp.hasGotToken ) {
-            if ( BaseApp.times < 3 ) {
+        if (!BaseApp.hasGotToken) {
+            if (BaseApp.times < 3) {
                 Toast.makeText(getApplicationContext(), "token还未成功获取,请稍后", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(), "token未能成功获取,请杀掉APP后重启APP", Toast.LENGTH_LONG).show();
@@ -589,51 +623,32 @@ public class MainActivity extends BaseActicity {
     protected void onDestroy() {
         super.onDestroy();
         // 释放内存资源
-        if ( OCR.getInstance() != null )
+        if (OCR.getInstance() != null)
             OCR.getInstance().release();
     }
 
     private void doPost(final String expect, final PostResultListener listener) {
-        showDialog();
-
-        //返回字符串
-        try {
-            HttpUtils.doGet(this, "http://caipu.yjghost.com/index.php/query/read?menu=" + URLEncoder.encode("土豆", "UTF-8") + "&rn=15&start=1", new HttpCallbackStringListener() {
-
-                @Override
-                public void onFinish(String response) {
-//                    tvContent.setText(response);
-                }
-
-                @Override
-                public void onError(Exception e) {
-//                    tvContent.setText(e.toString());
-                }
-            });
-        } catch ( UnsupportedEncodingException e ) {
-            e.printStackTrace();
+        String url = "http://www.mxnzp.com/api/lottery/ssq/latest";
+        if (!TextUtils.isEmpty(expect)) {
+            url = "http://www.mxnzp.com/api/lottery/ssq/aim_lottery?expect=" + expect;
         }
+        //返回字符串
+        HttpUtils.doGet(this, url, new HttpCallbackStringListener() {
 
-//        new Thread() {
-//            //在新线程中发送网络请求
-//            public void run() {
-//                final String res = new ShowApiRequest("http://route.showapi.com/44-3",
-//                        Console.APP_ID_API, Console.APP_SECRET_API)
-//                        .addTextPara("code", "ssq")
-//                        .addTextPara("expect", expect)
-//                        .post();
-//                //把返回内容通过handler对象更新到界面
-//                mHandler.post(new Thread() {
-//                    public void run() {
-//                        if ( gson == null ) {
-//                            gson = new Gson();
-//                        }
-//                        listener.result(gson.fromJson(res, LotteryModel.class));
-//                        stopDialog();
-//                    }
-//                });
-//            }
-//        }.start();
+            @Override
+            public void onFinish(String response) {
+                if (gson == null) {
+                    gson = new Gson();
+                }
+                listener.result(gson.fromJson(response, LotteryModel.class));
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(MainActivity.this, "服务器异常，请稍后再试", Toast.LENGTH_SHORT).show();
+                stopDialog();
+            }
+        });
     }
 
     interface PostResultListener {
@@ -653,7 +668,7 @@ public class MainActivity extends BaseActicity {
         WindowManager windowManager = this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = myAlertDialog.getWindow().getAttributes();
-        lp.width = ( int ) (display.getWidth() - 200); //设置宽度
+        lp.width = (int) (display.getWidth() - 200); //设置宽度
         myAlertDialog.getWindow().setAttributes(lp);
     }
 
@@ -664,16 +679,16 @@ public class MainActivity extends BaseActicity {
         WindowManager windowManager = this.getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = myAlertDialog.getWindow().getAttributes();
-        lp.width = ( int ) (display.getWidth() - 200); //设置宽度
+        lp.width = (int) (display.getWidth() - 200); //设置宽度
         myAlertDialog.getWindow().setAttributes(lp);
     }
 
     //开启红号的滑动选择器
     private void initDatePickerRed(int index) {
         final ArrayList<String> listStr = new ArrayList<>();
-        for ( int i = 1; i <= 33; i++ ) {
+        for (int i = 1; i <= 33; i++) {
             String s = "";
-            if ( i < 10 ) {
+            if (i < 10) {
                 s = "0" + i;
             } else {
                 s = i + "";
@@ -706,9 +721,9 @@ public class MainActivity extends BaseActicity {
     //开启蓝号的滑动选择器
     private void initDatePickerBlue(int index) {
         ArrayList<String> list1 = new ArrayList<>();
-        for ( int i = 1; i <= 16; i++ ) {
+        for (int i = 1; i <= 16; i++) {
             String s = "";
-            if ( i < 10 ) {
+            if (i < 10) {
                 s = "0" + i;
             } else {
                 s = i + "";

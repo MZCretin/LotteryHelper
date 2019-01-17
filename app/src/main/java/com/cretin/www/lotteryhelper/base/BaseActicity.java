@@ -17,10 +17,9 @@ public class BaseActicity extends AppCompatActivity {
      * @param msg
      */
     public void showDialog(String msg, boolean cancelable) {
-        if ( dialog == null ) {
+        if (dialog == null)
             dialog = CustomProgressDialog.createDialog(this);
-        }
-        if ( msg != null && !msg.equals("") ) {
+        if (msg != null && !msg.equals("")) {
             dialog.setMessage(msg);
         }
         dialog.setCancelable(cancelable);
@@ -47,8 +46,9 @@ public class BaseActicity extends AppCompatActivity {
      * 关闭对话框
      */
     public void stopDialog() {
-        if ( dialog != null && dialog.isShowing() ) {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
+
 }
