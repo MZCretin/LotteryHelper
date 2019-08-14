@@ -284,9 +284,9 @@ public class MainActivity extends BaseActicity {
                 helper.getView(R.id.tv_fenxi).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showDialog("正在计算...",false);
+                        showDialog("正在计算...", false);
                         String kjq = ((EditText) helper.getView(R.id.tv_kjq)).getText().toString();
-                        if (!TextUtils.isEmpty(kjq) && kjq.length() == 7) {
+                        if (!TextUtils.isEmpty(kjq)) {
                             //删除之前的数据
                             Iterator<LotteryItemModel> it = list.iterator();
                             while (it.hasNext()) {
@@ -373,7 +373,7 @@ public class MainActivity extends BaseActicity {
                     LotteryModel.DataBean result1 = result.getData();
                     if (result1 != null) {
                         //有数据
-                        if (kjq.equals(result1.getExpect())) {
+                        if (kjq.equals(result1.getExpect()) || kjq.endsWith(result1.getExpect())) {
                             //分析中奖号码 02,07,09,14,18,28+05
                             String openCode = result1.getOpenCode();
                             String[] split = openCode.split(",");
@@ -392,7 +392,7 @@ public class MainActivity extends BaseActicity {
                             calcu(aims, lanHao, openCode, kjq);
                         }
                     }
-                }else {
+                } else {
                     Toast.makeText(MainActivity.this, "未查到该期彩票，请检查期号", Toast.LENGTH_SHORT).show();
                 }
                 stopDialog();
@@ -559,7 +559,7 @@ public class MainActivity extends BaseActicity {
             case R.id.option_normal_1:
                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                 intent1.putExtra(Intent.EXTRA_TEXT, "给你分享一个免费好用的福彩对号助手，复制链接去浏览器打开下载使用吧！链接：" +
-                        "http://jokesimg.cretinzp.com/common/lotteryhelper/apk/fcdhzs.apk");
+                        "http://jokesimg.cretinzp.com/common/lotteryhelper/apk/fcdhzs.apk?a=1");
                 intent1.setType("text/plain");
                 startActivity(Intent.createChooser(intent1, "share"));
                 return true;
