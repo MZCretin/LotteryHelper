@@ -628,9 +628,9 @@ public class MainActivity extends BaseActicity {
     }
 
     private void doPost(final String expect, final PostResultListener listener) {
-        String url = "http://www.mxnzp.com/api/lottery/ssq/latest";
+        String url = "http://www.mxnzp.com/api/lottery/common/latest?code=ssq";
         if (!TextUtils.isEmpty(expect)) {
-            url = "http://www.mxnzp.com/api/lottery/ssq/aim_lottery?expect=" + expect;
+            url = "http://www.mxnzp.com/api/lottery/common/aim_lottery?code=ssq&expect=" + expect;
         }
         //返回字符串
         HttpUtils.doGet(this, url, new HttpCallbackStringListener() {
