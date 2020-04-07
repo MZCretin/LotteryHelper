@@ -286,7 +286,7 @@ public class MainActivity extends BaseActicity {
                     public void onClick(View v) {
                         showDialog("正在计算...", false);
                         String kjq = ((EditText) helper.getView(R.id.tv_kjq)).getText().toString();
-                        if (!TextUtils.isEmpty(kjq) && kjq.length() == 7) {
+                        if (!TextUtils.isEmpty(kjq)) {
                             //删除之前的数据
                             Iterator<LotteryItemModel> it = list.iterator();
                             while (it.hasNext()) {
@@ -557,7 +557,7 @@ public class MainActivity extends BaseActicity {
             case R.id.option_normal_1:
                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                 intent1.putExtra(Intent.EXTRA_TEXT, "给你分享一个免费好用的福彩对号助手，复制链接去浏览器打开下载使用吧！链接：" +
-                        "http://jokesimg.cretinzp.com/common/lotteryhelper/apk/fcdhzs.apk");
+                        "http://jokesimg.cretinzp.com/common/lotteryhelper/apk/fcdhzs.apk?a=1");
                 intent1.setType("text/plain");
                 startActivity(Intent.createChooser(intent1, "share"));
                 return true;
