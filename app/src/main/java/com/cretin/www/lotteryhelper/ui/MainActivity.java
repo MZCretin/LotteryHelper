@@ -284,7 +284,7 @@ public class MainActivity extends BaseActicity {
                 helper.getView(R.id.tv_fenxi).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showDialog("正在计算...",false);
+                        showDialog("正在计算...", false);
                         String kjq = ((EditText) helper.getView(R.id.tv_kjq)).getText().toString();
                         if (!TextUtils.isEmpty(kjq) && kjq.length() == 7) {
                             //删除之前的数据
@@ -373,26 +373,24 @@ public class MainActivity extends BaseActicity {
                     LotteryModel.DataBean result1 = result.getData();
                     if (result1 != null) {
                         //有数据
-                        if (kjq.equals(result1.getExpect())) {
-                            //分析中奖号码 02,07,09,14,18,28+05
-                            String openCode = result1.getOpenCode();
-                            String[] split = openCode.split(",");
-                            List<String> aims = new ArrayList<>();
-                            String lanHao = "";
-                            for (int i = 0; i < split.length; i++) {
-                                if (i < split.length - 1) {
-                                    aims.add(split[i]);
-                                } else {
-                                    //最后一个
-                                    aims.add(split[i].split("\\+")[0]);
-                                    lanHao = split[i].split("\\+")[1];
-                                }
+                        //分析中奖号码 02,07,09,14,18,28+05
+                        String openCode = result1.getOpenCode();
+                        String[] split = openCode.split(",");
+                        List<String> aims = new ArrayList<>();
+                        String lanHao = "";
+                        for (int i = 0; i < split.length; i++) {
+                            if (i < split.length - 1) {
+                                aims.add(split[i]);
+                            } else {
+                                //最后一个
+                                aims.add(split[i].split("\\+")[0]);
+                                lanHao = split[i].split("\\+")[1];
                             }
-                            //计算结果
-                            calcu(aims, lanHao, openCode, kjq);
                         }
+                        //计算结果
+                        calcu(aims, lanHao, openCode, kjq);
                     }
-                }else {
+                } else {
                     Toast.makeText(MainActivity.this, "未查到该期彩票，请检查期号", Toast.LENGTH_SHORT).show();
                 }
                 stopDialog();
@@ -628,9 +626,9 @@ public class MainActivity extends BaseActicity {
     }
 
     private void doPost(final String expect, final PostResultListener listener) {
-        String url = "http://www.mxnzp.com/api/lottery/ssq/latest";
+        String url = "https://www.mxnzp.com/api/lottery/common/latest?code=ssq&app_id=xgjftdiauwetheop&app_secret=NlBselBJVUdDOVZKKyt5MXU0Ym5lUT09";
         if (!TextUtils.isEmpty(expect)) {
-            url = "http://www.mxnzp.com/api/lottery/ssq/aim_lottery?expect=" + expect;
+            url = "https://www.mxnzp.com/api/lottery/common/aim_lottery?code=ssq&expect=" + expect + "&app_id=xgjftdiauwetheop&app_secret=NlBselBJVUdDOVZKKyt5MXU0Ym5lUT09";
         }
         //返回字符串
         HttpUtils.doGet(this, url, new HttpCallbackStringListener() {
